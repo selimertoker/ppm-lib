@@ -1,2 +1,2 @@
 # ppm-lib
-cpp functions to read-write-edit binary .ppm image files
+c++ functions to read-write-edit binary .ppm image files
