@@ -2,7 +2,7 @@
 #include<iostream>
 #include<fstream>
 
-#include "imglib.h"
+#include "ppm-lib.h"
 
 bool help(int argc,char** argv){
 	if(
@@ -75,7 +75,7 @@ int* readimg(char* filen)
 	fileh.read(&x,1);
 	magic[1]=(char)x;
 
-	if((magic[0]!='P')||(magic[1]!='6')){return 1;}
+	if((magic[0]!='P')||(magic[1]!='6')){std::cout<<"not a P6 file!\n";}
 
 	fileh.read(&x,1);
 
@@ -104,7 +104,7 @@ int* readimg(char* filen)
 	for(i=0;i<size[0]*size[1]*3;i++)
 	{
 		fileh.read(&x, 1);
-		if(x<0){buf[i]=(int)x+128;}
+		if(x<0){buf[i]=(int)x+256;}
 		else{buf[i]=(int)x;}
 		if(x==EOF){break;}
 	}
@@ -149,6 +149,8 @@ int writeimg(int* buf,int* size,char* filen)
 
 	for(int i=0;i<size[0]*size[1]*3;i++)
 	{
+		if(buf[i]>128){char ch=buf[i]-256;}
+		else{char ch=buf[i];}
 		char ch=buf[i];
 		fileh.write(&ch, 1);
 	}
@@ -173,6 +175,6 @@ int setpxl(int* buf,int* size,int x,int y,int* color)
 int* getpxl(int* buf,int* size,int x,int y){
 	int pxlindex=3*(size[0]*y+x);
 //	if(buf[pxlindex]<0){std::cout<<buf[pxlindex]<<' '<<x<<' '<<y<<std::endl;}
-	int color[3]={buf[pxlindex+0],buf[pxlindex+1],buf[pxlindex+2]};
+	static int color[3]={buf[pxlindex+0],buf[pxlindex+1],buf[pxlindex+2]};
 	return color;
 }
