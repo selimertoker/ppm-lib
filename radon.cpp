@@ -19,9 +19,9 @@ int ray(image refimg,image radimg,char* fname,int degree,int R){
 			line[1]+=refimg.buf[index+1];
 			line[2]+=refimg.buf[index+2];
 		}
-		line[0]/=R;
-		line[1]/=R;
-		line[2]/=R;
+		line[0]/=(R*2);
+		line[1]/=(R*2);
+		line[2]/=(R*2);
 		radimg.setpxl(degree,rof+R,line); //radon image
 		for(int r=-R;r<R;r++){
 			cord[0]=(int)(R+(r*cos-rof*sin)/(std::sqrt(2)));
