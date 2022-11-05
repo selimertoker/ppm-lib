@@ -1,14 +1,15 @@
-
+// image sequence adder, adds by arithmetic mean
 #include <iostream>
 #include<fstream>
 #include "ppm-lib.h"
 
 int main(int argc,char** argv){
 	if(argc==1){
-		std::cout<<"radon image merge program\nUsage: merge out_file in(min) in(max)\n";
+		std::cout<<"radon image merge program, merges by aarithmetic mean\nUsage: merge out_file in(min) in(max)\n";
 		return 0;
 	}
 	image buf(512,512,255);
+//	buf.reset();
 	int min=0;
 	for(int i=0;i<4;i++){
 		if ((int)argv[2][i]==0){break;}
@@ -20,6 +21,7 @@ int main(int argc,char** argv){
 		max=(max*10)+((int)argv[3][i]-48);
 	}
 	for(int i=min;i<=max;i++){
+		std::cout<<i<<'\n';
 		image img(512,512,255);
 		char fname[7]={0,0,0,0,0,0,0};
 		int j;
@@ -39,6 +41,8 @@ int main(int argc,char** argv){
 				buf.setpxl(x,y,color);
 			}
 		}
+		free(img.buf);
+		std::cout<<i<<"\r";
 	}
 	int color[3];
 	for(int y=0;y<buf.height;y++){
@@ -48,6 +52,7 @@ int main(int argc,char** argv){
 			color[2]=buf.getpxl(x,y,2)/(max-min);
 			buf.setpxl(x,y,color);
 		}
+		std::cout<<y<<"\r";
 	}
 	buf.savefile(argv[1]);
 	return 0;
