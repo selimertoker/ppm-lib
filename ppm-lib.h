@@ -10,7 +10,7 @@ class image {
 		int width; int height; int maxcolor;
 		image(int x,int y,int c)
 		{
-			width=x; height=y; maxcolor=c;
+			width=x+1; height=y+1; maxcolor=c;
 			buf=(int*)malloc(height*width*3*sizeof(int));
 		}
 		void reset(){
@@ -18,20 +18,27 @@ class image {
 				buf[i]=0;
 			}
 		}
-		int getpxl(int x,int y,int c)
-		{
-			if ((x>width) || (x<0)) {return 0;}
-			if ((y>height) || (y<0)) {return 0;}
-			return buf[3*(width*y+x)+c];
-		}
-		void setpxl(int x,int y,int* color)
+		void getpxl(int x,int y,int* color)
 		{
 			if ((x<width) && (x>0) && (y<height) && (y>0))
 			{
-				buf[3*(width*y+x)+0]=color[0];
-				buf[3*(width*y+x)+1]=color[1];
-				buf[3*(width*y+x)+2]=color[2];
+				color[0] = buf[3*(width*y+x)+0];
+				color[1] = buf[3*(width*y+x)+1];
+				color[2] = buf[3*(width*y+x)+2];
+				color[3] = 0;
 			}
+			else{color[3]=1;}
+		}
+		void setpxl(int x,int y,int* color)
+		{
+			if ((x<width) && (x>=0) && (y<height) && (y>=0))
+			{
+				buf[3*(width*y+x)+0] = color[0];
+				buf[3*(width*y+x)+1] = color[1];
+				buf[3*(width*y+x)+2] = color[2];
+				color[3] = 0;
+			}
+			else{color[3]=1;}
 		}
 		void readfile(char* fname)
 		{
@@ -70,11 +77,6 @@ class image {
 					fileh.read(&w, 1);
 					if(w<0){buf[i]=(int)w+256;}
 					else{buf[i]=(int)w;}
-					//					std::cout<<"---"<<i<<' '<<buf[i]<<'\n';
-					//					if(i%(width*3)==0){putchar('\n');}
-					//					if(buf[i]>128){putchar('#');}
-					//					else{putchar('-');}
-
 				}
 			}
 			else{std::cout<<"NO FILE\n";}
